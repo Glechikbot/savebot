@@ -36,13 +36,13 @@ def clean_tiktok_url(url: str) -> str:
 
 def download_instagram_video(insta_url: str) -> str:
     try:
-        api = "https://igram.world/api/ig"
-        response = requests.post(api, data={"url": insta_url}, timeout=10)
-        result = response.json()
-        if result.get("data") and result["data"].get("medias"):
-            return result["data"]["medias"][0]["url"]
+        api_url = f"https://api.instasupersave.com/instagram?url={insta_url}"
+        response = requests.get(api_url, timeout=10)
+        data = response.json()
+        if data.get("url"):
+            return data["url"]
     except Exception as e:
-        logging.error("Instagram API igram.world failed: %s", e)
+        logging.error("Instagram API instasupersave failed: %s", e)
     return None
 
 @dp.message_handler(commands=['start'])
