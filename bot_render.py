@@ -12,7 +12,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.types import Message
 from aiogram.utils import executor
 
-API_TOKEN = '7737256487:AAFtBnYmgDCQ2_4ZX9_wpz6kH2Opy2-7KE4'
+API_TOKEN = os.environ.get("BOT_TOKEN")
 
 logging.basicConfig(level=logging.INFO)
 
@@ -36,15 +36,13 @@ def clean_tiktok_url(url: str) -> str:
 
 def download_instagram_video(insta_url: str) -> str:
     try:
-        api = "https://saveig.app/api/ajaxSearch"
-        headers = {"Content-Type": "application/x-www-form-urlencoded"}
-        data = f"q={insta_url}&t=media"
-        response = requests.post(api, headers=headers, data=data)
+        api = "https://igram.world/api/ig"
+        response = requests.post(api, data={"url": insta_url}, timeout=10)
         result = response.json()
-        if result.get("data"):
-            return result["data"][0]["url"]
+        if result.get("data") and result["data"].get("medias"):
+            return result["data"]["medias"][0]["url"]
     except Exception as e:
-        logging.error("Instagram download failed: %s", e)
+        logging.error("Instagram API igram.world failed: %s", e)
     return None
 
 @dp.message_handler(commands=['start'])
@@ -69,7 +67,7 @@ async def download_video(message: Message):
                     path = ydl.prepare_filename(info)
                 await message.reply_video(open(path, 'rb'))
             except Exception as e:
-                logging.error("Download error: %s", e)
+                logging.error("TikTok download failed: %s", e)
                 await message.reply("🥲 Не вдалося завантажити TikTok.")
     elif "instagram.com" in raw or "instagr.am" in raw:
         await message.reply("🔍 Завантажую Instagram...")
