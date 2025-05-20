@@ -36,7 +36,7 @@ def clean_tiktok_url(url: str) -> str:
 
 def download_instagram_video(insta_url: str) -> str:
     try:
-        proxy_url = "https://proxy-x48a.onrender.com/download_instagram"
+        proxy_url = "https://prox-09t5.onrender.com/download_instagram"
         resp = requests.post(proxy_url, json={"url": insta_url}, timeout=10)
         data = resp.json()
         return data.get("url")
