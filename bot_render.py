@@ -36,13 +36,15 @@ def clean_tiktok_url(url: str) -> str:
 
 def download_instagram_video(insta_url: str) -> str:
     try:
-        api_url = f"https://api.instasupersave.com/instagram?url={insta_url}"
-        response = requests.get(api_url, timeout=10)
-        data = response.json()
-        if data.get("url"):
-            return data["url"]
+        api_url = "https://snapinsta.to/api/ajaxSearch"
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
+        data = f"q={insta_url}&t=media"
+        response = requests.post(api_url, headers=headers, data=data, timeout=10)
+        result = response.json()
+        if result.get("data"):
+            return result["data"][0]["url"]
     except Exception as e:
-        logging.error("Instagram API instasupersave failed: %s", e)
+        logging.error("Instagram SnapInsta download failed: %s", e)
     return None
 
 @dp.message_handler(commands=['start'])
