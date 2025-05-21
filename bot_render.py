@@ -9,15 +9,11 @@ from aiogram.utils import executor
 from yt_dlp import YoutubeDL
 from dotenv import load_dotenv
 
-# Load .env
+# Load environment variables
 load_dotenv()
-
 API_TOKEN = os.getenv("BOT_TOKEN")
 if not API_TOKEN:
     raise RuntimeError("BOT_TOKEN is not set")
-
-# Optional TikTok cookies; can be empty
-TT_COOKIES = os.getenv("TT_COOKIES", "")
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=API_TOKEN)
@@ -25,7 +21,7 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start', 'help'])
 async def cmd_start(message: Message):
-    await message.reply("Привіт! Надішліть посилання на TikTok або Instagram відео і я його скачаю 🎬")
+    await message.reply("Привіт! Надішліть посилання на TikTok або Instagram відео, і я його скачаю 🎬")
 
 @dp.message_handler()
 async def handle_message(message: Message):
@@ -45,13 +41,6 @@ async def handle_message(message: Message):
             'outtmpl': os.path.join(tmpdir, '%(id)s.%(ext)s'),
             'quiet': True,
         }
-        # Use TT_COOKIES for TikTok if provided
-        if platform == "TikTok" and TT_COOKIES:
-            cookie_file = os.path.join(tmpdir, "tiktok_cookies.txt")
-            with open(cookie_file, 'w') as cf:
-                cf.write(TT_COOKIES)
-            opts['cookiefile'] = cookie_file
-
         try:
             with YoutubeDL(opts) as ydl:
                 info = ydl.extract_info(url, download=True)
@@ -61,7 +50,7 @@ async def handle_message(message: Message):
             logging.error("Download error: %s", e)
             await message.reply(f"🥲 Не вдалося завантажити {platform} відео.")
 
-# Flask app for health checks
+# Flask for health checks
 flask_app = Flask(__name__)
 
 @flask_app.route("/", methods=["GET"])
