@@ -25,7 +25,7 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start', 'help'])
 async def cmd_start(message: Message):
-    await message.reply("Привіт! Надішліть лінк на Instagram чи TikTok — я закачаю всі відео 🎬")
+    await message.reply("Нормально давай🎬")
 
 @dp.message_handler()
 async def handle_message(message: Message):
