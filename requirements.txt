@@ -3,5 +3,5 @@ aiohttp==3.8.6
 yt-dlp
 Flask==3.0.3
 python-dotenv==1.0.1
-requests
-beautifulsoup4
+requests==2.31.0
+beautifulsoup4==4.12.3
